@@ -1,11 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import pending from "../asset/image/clipboard.png";
-import ready_to_pick from "../asset/image/delivery-man.png";
-import shipping from "../asset/image/fast-delivery.png";
-import done from "../asset/image/check.png";
-import cancel from "../asset/image/remove.png";
 import Image from "next/image";
 
 const statusOrder = [
@@ -60,7 +55,6 @@ const OrderDetail = () => {
       },
     ],
     status: "PENDING",
-    // tracking:
   };
 
   return (
