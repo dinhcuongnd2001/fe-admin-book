@@ -10,7 +10,7 @@ interface CustomAxiosConfig extends InternalAxiosRequestConfig {
 }
 
 const axiosProtected = axios.create({
-  baseURL: "/api",
+  baseURL: process.env.NEXT_PUBLIC_SEVER_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -25,15 +25,13 @@ axiosProtected.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // before send req
     // we will get accessToken from localhost and bind it into header;
-
-    const accessToken = JSON.parse(String(localStorage.getItem("accessToken")));
+    const accessToken = String(localStorage.getItem("accessToken"));
     if (accessToken) {
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${accessToken}`,
       } as AxiosRequestHeaders;
     }
-
     return config;
   },
   (err) => {

@@ -12,9 +12,8 @@ interface TypeResponse {
 export const refreshTokenFn = mem(
   async (): Promise<TypeGenTokenPair> => {
     // b1 get refreshtoken from localStorage
-    const refreshToken = JSON.parse(
-      String(localStorage.getItem("refreshToken"))
-    );
+    const refreshToken = String(localStorage.getItem("refreshToken"));
+
     try {
       const {
         data: { accessToken, refreshToken: newRefreshToken },
