@@ -5,14 +5,14 @@ import { IoClose } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
 import { classNames } from "@/utils";
 import { usePathname } from "next/navigation";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaBookOpen } from "react-icons/fa";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: FaHome },
-  { name: "Orders", href: "/orders", icon: FaHome },
-  { name: "Projects", href: "#", icon: FaHome },
-  { name: "Calendar", href: "#", icon: FaHome },
-  { name: "Documents", href: "#", icon: FaHome },
-  { name: "Reports", href: "#", icon: FaHome },
+  { name: "Orders", href: "/orders", icon: FaShoppingCart },
+  { name: "Books", href: "#", icon: FaBookOpen },
+  { name: "Publish Hourse", href: "#", icon: FaHome },
 ];
 
 const Sidebar = () => {
@@ -122,7 +122,7 @@ const Sidebar = () => {
       </Transition.Root>
 
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-500 px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
             <img
               className="h-8 w-auto"
@@ -139,9 +139,9 @@ const Sidebar = () => {
                       <a
                         href={item.href}
                         className={classNames(
-                          item.href === pathname
-                            ? "bg-indigo-700 text-white"
-                            : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                          pathname.includes(item.href)
+                            ? "bg-gray-600 text-white"
+                            : "text-black hover:text-white hover:bg-gray-600",
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                         )}
                       >
@@ -149,7 +149,7 @@ const Sidebar = () => {
                           className={classNames(
                             item.href === pathname
                               ? "text-white"
-                              : "text-indigo-200 group-hover:text-white",
+                              : "text-black group-hover:text-white",
                             "h-6 w-6 shrink-0"
                           )}
                           aria-hidden="true"

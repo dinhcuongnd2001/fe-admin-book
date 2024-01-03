@@ -1,5 +1,13 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { axiosProtected } from "@/configs/axios/axios.protected";
+import dayjs from "dayjs";
+import { OrderStatus, PAGE_PER_PAGE, SortByDate } from "@/constants";
+import { IOrder } from "@/interfaces";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import Pagination from "@/components/Pagination";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const orderData = [
   {
@@ -27,6 +35,39 @@ const orderData = [
 ];
 
 const OrdersPage = () => {
+  const [query, setQuery] = useState<{
+    limit: number;
+    page: number;
+    status: OrderStatus | "";
+    date: SortByDate | "";
+  }>({ limit: PAGE_PER_PAGE, page: 1, status: "", date: "" });
+
+  const [listOrder, setListOrder] = useState<IOrder[]>();
+  const [total, setTotal] = useState<number>(0);
+
+  useEffect(() => {
+    axiosProtected
+      .get(
+        `/order?limit=${query.limit}&page=${query.page}&status=${query.status}&date=${query.date}`
+      )
+      .then((res) => {
+        setListOrder(res.data.orders);
+        setTotal(res.data.total);
+      })
+      .catch((e) => console.log("e :", e));
+  }, [query]);
+
+  const handleSortByDate = () => {
+    if (!query.date || query.date === SortByDate.DESC) {
+      setQuery({ ...query, date: SortByDate.ASC });
+      return;
+    }
+    setQuery({ ...query, date: SortByDate.DESC });
+  };
+
+  const handleChangePage = (currentPage: number) => {
+    setQuery({ ...query, page: currentPage });
+  };
   return (
     <div className="pt-10 px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -58,7 +99,17 @@ const OrdersPage = () => {
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Thời gian tạo
+                    <p
+                      className="flex items-center gap-1 cursor-pointer"
+                      onClick={handleSortByDate}
+                    >
+                      Thời gian tạo
+                      {!query.date || query.date === SortByDate.DESC ? (
+                        <FaAngleDown />
+                      ) : (
+                        <FaAngleUp />
+                      )}
+                    </p>
                   </th>
                   <th
                     scope="col"
@@ -72,19 +123,19 @@ const OrdersPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {orderData.map((order) => (
+                {listOrder?.map((order) => (
                   <tr key={order.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {order.name}
+                      {order.id}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {order.name}
+                      {order.tracking?.customerName || ""}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {order.created.toISOString()}
+                      {dayjs(order.createdAt).format("DD-MM-YYYY")}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {order.price}
+                      {formatCurrency(order.payment.amount)}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <Link
@@ -101,6 +152,13 @@ const OrdersPage = () => {
           </div>
         </div>
       </div>
+
+      <Pagination
+        page={query.page}
+        size={query.limit}
+        total={total}
+        onChange={handleChangePage}
+      />
     </div>
   );
 };
