@@ -77,8 +77,11 @@ const OrderDetail = () => {
 
   const [order, setOrder] = useState<IOrder>();
 
+  const [refetch, setRefetch] = useState<Boolean>(false);
+
   useEffect(() => {
     if (!id) return;
+
     axiosProtected
       .get<any, { data: IOrder }>(`/order/${id}`)
       .then((res) => {
@@ -87,7 +90,8 @@ const OrderDetail = () => {
       .catch((e) => {
         toast.error("Lỗi không lấy được đơn hàng");
       });
-  }, [id]);
+    setRefetch(false);
+  }, [id, refetch]);
 
   const productPrice = useMemo(() => {
     if (!order) return 0;
@@ -97,9 +101,30 @@ const OrderDetail = () => {
     );
   }, [order]);
 
-  const handleConfirm = () => {};
+  const handleConfirm = () => {
+    axiosProtected
+      .patch(`/order/confirm/${id}`)
+      .then((res) => {
+        console.log("res :", res);
+        toast.success("Xác nhận đơn hàng thành công");
+        setRefetch(!refetch);
+      })
+      .catch((e) => {
+        toast.error("Xác nhận đơn hàng thất bại");
+      });
+  };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    axiosProtected
+      .patch(`/order/cancel/${id}`)
+      .then((res) => {
+        toast.success("Hủy đơn hàng thành công");
+        setRefetch(!refetch);
+      })
+      .catch((e) => {
+        toast.error("Hủy đơn hàng thất bại");
+      });
+  };
 
   return (
     <div className="bg-gray-50">
