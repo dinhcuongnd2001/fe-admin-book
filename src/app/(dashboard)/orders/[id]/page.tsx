@@ -105,7 +105,6 @@ const OrderDetail = () => {
     axiosProtected
       .patch(`/order/confirm/${id}`)
       .then((res) => {
-        console.log("res :", res);
         toast.success("Xác nhận đơn hàng thành công");
         setRefetch(!refetch);
       })
