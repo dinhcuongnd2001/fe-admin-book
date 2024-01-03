@@ -25,7 +25,7 @@ function LoginComponent() {
       .then((res) => {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        router.push("/order");
+        router.push("/orders");
         toast.success("Đăng nhập thành công");
       })
       .catch((e) => {
