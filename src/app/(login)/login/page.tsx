@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { IoPersonCircle } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import { axiosPublic } from "@/configs/axios/axios.public";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 function LoginComponent() {
   const [visibalePass, setVisibalePass] = useState(false);
   const [account, setAccount] = useState<{ email: string; password: string }>({
@@ -14,7 +15,7 @@ function LoginComponent() {
   });
 
   const router = useRouter();
-  const handleLogin = () => {
+  const handleLogin = async () => {
     axiosPublic
       .post<any, { data: { accessToken: string; refreshToken: string } }>(
         "/auth/login",
@@ -25,7 +26,7 @@ function LoginComponent() {
       .then((res) => {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        router.push("/dashboard");
+        router.push("/order");
         toast.success("Đăng nhập thành công");
       })
       .catch((e) => {

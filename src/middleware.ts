@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { redirect } from "next/navigation";
 
 export function middleware(req: NextRequest) {
   // if don't add config, i will lost file css
@@ -9,7 +8,7 @@ export function middleware(req: NextRequest) {
   // if (req.nextUrl.pathname.startsWith("/_next")) {
   //   return NextResponse.next();
   // }
-  if (req.nextUrl.pathname !== "/login") {
+  if (req.nextUrl.pathname === "/") {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }

@@ -21,11 +21,17 @@ export interface IOrder {
   id: string;
   payment: IPayment;
   status: OrderStatus;
-  tracking: ITracking;
+  tracking?: ITracking;
 }
 
 interface IBookInOrders {
-  name: string;
+  amount: number;
+  book: {
+    thumbnailUrl?: string;
+    name: string;
+  };
+  currentBookPrice: number;
+  bookType: TypeBook;
 }
 
 interface IPayment {

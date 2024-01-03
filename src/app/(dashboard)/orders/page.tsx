@@ -7,6 +7,7 @@ import { OrderStatus, PAGE_PER_PAGE, SortByDate } from "@/constants";
 import { IOrder } from "@/interfaces";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Pagination from "@/components/Pagination";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const orderData = [
   {
@@ -134,7 +135,7 @@ const OrdersPage = () => {
                       {dayjs(order.createdAt).format("DD-MM-YYYY")}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {order.payment.amount}
+                      {formatCurrency(order.payment.amount)}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <Link
