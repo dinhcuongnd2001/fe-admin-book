@@ -1,12 +1,11 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { IoPersonCircle } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import { axiosPublic } from "@/configs/axios/axios.public";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 function LoginComponent() {
   const [visibalePass, setVisibalePass] = useState(false);
   const [account, setAccount] = useState<{ email: string; password: string }>({
